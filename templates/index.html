@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blueprint to 3D Converter</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <!-- Babylon.js CDN -->
+    <script src="https://cdn.babylonjs.com/babylon.js"></script>
+    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
+</head>
+<body>
+    <h1>Blueprint to 3D Converter</h1>
+    
+    <div class="upload-container">
+        <h2>Upload Blueprint</h2>
+        <p>Supported formats: PDF, DXF, DWG</p>
+        <input type="file" id="fileInput" accept=".pdf,.dxf,.dwg">
+        <button onclick="uploadFile()">Upload and Convert</button>
+    </div>
+    
+    <div id="status"></div>
+    
+    <!-- 3D Viewer Canvas -->
+    <div id="viewer-container" style="display:none;">
+    <h2>3D Visualization</h2>
+    <canvas id="renderCanvas"></canvas>
+    <div id="controls-info">
+    <p>🖱️ <strong>Click + Drag to look</strong> | WASD: Walk | SPACE: Toggle Fly | Q/E: Up/Down (fly) | Scroll: Zoom</p>
+    <button onclick="topView()" style="margin: 5px;">📐 Top View</button>
+    <button onclick="sideView()" style="margin: 5px;">📏 Side View</button>
+    <button onclick="perspectiveView()" style="margin: 5px;">🏠 Perspective View</button>
+    <button onclick="resetCamera()" style="margin: 5px;">🔄 Reset Position</button>
+    <br>
+    <button onclick="adjustSpeed('slower')" style="margin: 5px;">🐢 Slower</button>
+    <button onclick="adjustSpeed('faster')" style="margin: 5px;">🐇 Faster</button>
+    <span id="speed-display" style="margin-left: 10px;">Speed: Normal</span>
+</div>
+
+
+
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/babylon-renderer.js') }}"></script>
+    <!-- Physics engine for collisions -->
+    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+</body>
+</html>

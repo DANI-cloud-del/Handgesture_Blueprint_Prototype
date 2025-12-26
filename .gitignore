@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.so
+
+# Virtual environments
+venv/
+ENV/
+.venv/
+.env
+.env.*
+
+# Package distributions
+*.egg-info/
+dist/
+build/
+*.whl
+
+# Logs and coverage
+*.log
+.coverage
+.pytest_cache/
+.mypy_cache/
+
+# IDE and OS files
+.vscode/
+.DS_Store
+Thumbs.db
