@@ -3,46 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blueprint to 3D Converter</title>
+    <title>Blueprint to 3D Converter - Upload</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <!-- Babylon.js CDN -->
-    <script src="https://cdn.babylonjs.com/babylon.js"></script>
-    <script src="https://cdn.babylonjs.com/loaders/babylonjs.loaders.min.js"></script>
 </head>
 <body>
-    <h1>Blueprint to 3D Converter</h1>
-    
-    <div class="upload-container">
-        <h2>Upload Blueprint</h2>
-        <p>Supported formats: PDF, DXF, DWG</p>
-        <input type="file" id="fileInput" accept=".pdf,.dxf,.dwg">
-        <button onclick="uploadFile()">Upload and Convert</button>
+    <div class="container">
+        <h1>Blueprint to 3D Converter</h1>
+        <p class="subtitle">Step 1: Upload your blueprint file</p>
+        
+        <div class="upload-section">
+            <input type="file" id="fileInput" accept=".dxf,.dwg,.pdf">
+            <button onclick="uploadFile()">Convert</button>
+        </div>
+        
+        <div id="status"></div>
+        <div id="progress-bar" style="display: none;">
+            <div class="progress-fill"></div>
+        </div>
     </div>
-    
-    <div id="status"></div>
-    
-    <!-- 3D Viewer Canvas -->
-    <div id="viewer-container" style="display:none;">
-    <h2>3D Visualization</h2>
-    <canvas id="renderCanvas"></canvas>
-    <div id="controls-info">
-    <p>🖱️ <strong>Click + Drag to look</strong> | WASD: Walk | SPACE: Toggle Fly | Q/E: Up/Down (fly) | Scroll: Zoom</p>
-    <button onclick="topView()" style="margin: 5px;">📐 Top View</button>
-    <button onclick="sideView()" style="margin: 5px;">📏 Side View</button>
-    <button onclick="perspectiveView()" style="margin: 5px;">🏠 Perspective View</button>
-    <button onclick="resetCamera()" style="margin: 5px;">🔄 Reset Position</button>
-    <br>
-    <button onclick="adjustSpeed('slower')" style="margin: 5px;">🐢 Slower</button>
-    <button onclick="adjustSpeed('faster')" style="margin: 5px;">🐇 Faster</button>
-    <span id="speed-display" style="margin-left: 10px;">Speed: Normal</span>
-</div>
 
-
-
-
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/babylon-renderer.js') }}"></script>
-    <!-- Physics engine for collisions -->
-    <script src="https://cdn.babylonjs.com/cannon.js"></script>
+    <script>
+        function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const statusDiv = document.getElementById('status');
+            const progressBar = document.getElementById('progress-bar');
+            
+            if (!fileInput.files[0]) {
+                statusDiv.className = 'error show';
+                statusDiv.textContent = 'Please select a file first';
+                return;
+            }
+            
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+            
+            statusDiv.textContent = 'Uploading and converting...';
+            statusDiv.className = 'show';
+            progressBar.style.display = 'block';
+            
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    statusDiv.className = 'error show';
+                    statusDiv.textContent = 'Error: ' + data.error;
+                } else {
+                    statusDiv.className = 'success show';
+                    statusDiv.textContent = '✓ Conversion successful! Redirecting...';
+                    
+                    // Redirect to region selector
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1000);
+                }
+            })
+            .catch(error => {
+                statusDiv.className = 'error show';
+                statusDiv.textContent = 'Upload failed: ' + error.message;
+            });
+        }
+    </script>
 </body>
 </html>

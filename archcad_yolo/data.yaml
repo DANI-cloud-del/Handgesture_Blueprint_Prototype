@@ -1,0 +1,6 @@
+path: /home/dani/Desktop/Handgesture_Blueprint_Prototype/archcad_yolo
+train: images/train
+val: images/val
+
+nc: 13
+names: ['door', 'window', 'table', 'chair', 'bed', 'sofa', 'toilet', 'sink', 'bathtub', 'wall', 'stair', 'elevator', 'parking']

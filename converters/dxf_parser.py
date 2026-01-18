@@ -71,3 +71,16 @@ class DXFParser:
                     'points': points,
                     'type': 'window'
                 })
+
+def _extract_furniture_blocks(self):
+    """Extract furniture as INSERT blocks"""
+    for entity in self.modelspace.query('INSERT'):
+        # Block name often indicates furniture type
+        block_name = entity.dxf.name
+        position = [entity.dxf.insert.x, entity.dxf.insert.y]
+        
+        self.furniture.append({
+            'name': block_name,  # e.g., "CHAIR", "TABLE"
+            'position': position,
+            'type': 'furniture'
+        })
